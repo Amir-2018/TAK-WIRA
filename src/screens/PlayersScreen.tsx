@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import { usePlayers } from '../context/PlayerContext';
 import { Player } from '../types/player';
+import BottomNavBar from '../components/BottomNavBar';
 
 export default function PlayersScreen({ navigation }: any) {
   const { players, deletePlayer } = usePlayers();
@@ -74,7 +74,7 @@ export default function PlayersScreen({ navigation }: any) {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" />
-      
+
       <View style={styles.header}>
         <View>
           <Text style={styles.headerTitle}>Team Roster</Text>
@@ -96,6 +96,8 @@ export default function PlayersScreen({ navigation }: any) {
       >
         <Text style={styles.addButtonText}>+ Add Player</Text>
       </TouchableOpacity>
+
+      <BottomNavBar />
     </SafeAreaView>
   );
 }
@@ -216,7 +218,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 110,
     left: 20,
     right: 20,
     backgroundColor: '#00FF41',

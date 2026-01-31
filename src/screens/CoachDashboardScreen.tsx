@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import { useApp } from '../context/AppContext';
 import { usePlayers } from '../context/PlayerContext';
-import { Tournament, Match } from '../types/user';
+import BottomNavBar from '../components/BottomNavBar';
+import { Tournament } from '../types/user';
 
 export default function CoachDashboardScreen({ navigation }: any) {
   const { user, logout, tournaments, matches, teams, mercatos, transfers, addTournament, updateTournament, deleteTournament } = useApp();
@@ -115,315 +116,298 @@ export default function CoachDashboardScreen({ navigation }: any) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" />
+    <View style={styles.container}>
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar barStyle="dark-content" />
 
-      {/* Header with User Avatar */}
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <Text style={styles.welcomeText}>Welcome back,</Text>
-          <Text style={styles.headerTitle}>{user?.name}</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.avatarBtn}
-          onPress={() => {
-            // Avatar click action - could show profile menu
-          }}
-        >
-          {user?.avatar ? (
-            <Image source={{ uri: user.avatar }} style={styles.avatar} />
-          ) : (
-            <View style={styles.avatarPlaceholder}>
-              <Text style={styles.avatarText}>{user?.name.charAt(0)}</Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* My Team Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Team</Text>
-            <TouchableOpacity
-              style={styles.viewAllBtn}
-              onPress={() => navigation.navigate('Players')}
-            >
-              <Text style={styles.viewAllText}>View All</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.teamCard}>
-            <View style={styles.teamAvatarContainer}>
-              <View style={styles.teamAvatar}>
-                <Text style={styles.teamAvatarText}>{players.length}</Text>
-              </View>
-              <View style={styles.teamBadge}>
-                <Text style={styles.teamBadgeText}>Active</Text>
-              </View>
-            </View>
-            <View style={styles.teamInfo}>
-              <Text style={styles.teamName}>Team Roster</Text>
-              <Text style={styles.teamCount}>{players.length} Players</Text>
-              <View style={styles.teamPositions}>
-                <Text style={styles.positionText}>Click "View All" to manage</Text>
-              </View>
-            </View>
-            <TouchableOpacity
-              style={styles.teamActionBtn}
-              onPress={() => navigation.navigate('Players')}
-            >
-              <Text style={styles.teamActionText}>Manage</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* My Teams Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Teams</Text>
-            <TouchableOpacity
-              style={styles.viewAllBtn}
-              onPress={() => navigation.navigate('Teams')}
-            >
-              <Text style={styles.viewAllText}>View All</Text>
-            </TouchableOpacity>
-          </View>
-          
-          <View style={styles.teamsGrid}>
-            {teams.slice(0, 3).map((team) => (
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          {/* My Team Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>My Team</Text>
               <TouchableOpacity
-                key={team.id}
-                style={styles.teamPreviewCard}
+                style={styles.viewAllBtn}
+                onPress={() => navigation.navigate('Players')}
+              >
+                <Text style={styles.viewAllText}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.teamCard}>
+              <View style={styles.teamAvatarContainer}>
+                <View style={styles.teamAvatar}>
+                  <Text style={styles.teamAvatarText}>{players.length}</Text>
+                </View>
+                <View style={styles.teamBadge}>
+                  <Text style={styles.teamBadgeText}>Active</Text>
+                </View>
+              </View>
+              <View style={styles.teamInfo}>
+                <Text style={styles.teamName}>Team Roster</Text>
+                <Text style={styles.teamCount}>{players.length} Players</Text>
+                <View style={styles.teamPositions}>
+                  <Text style={styles.positionText}>Click "View All" to manage</Text>
+                </View>
+              </View>
+              <TouchableOpacity
+                style={styles.teamActionBtn}
+                onPress={() => navigation.navigate('Players')}
+              >
+                <Text style={styles.teamActionText}>Manage</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* My Teams Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>My Teams</Text>
+              <TouchableOpacity
+                style={styles.viewAllBtn}
                 onPress={() => navigation.navigate('Teams')}
               >
-                <View style={styles.teamPreviewLogo}>
-                  <Text style={styles.teamPreviewLogoText}>{team.shortName}</Text>
+                <Text style={styles.viewAllText}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.teamsGrid}>
+              {teams.slice(0, 3).map((team) => (
+                <TouchableOpacity
+                  key={team.id}
+                  style={styles.teamPreviewCard}
+                  onPress={() => navigation.navigate('Teams')}
+                >
+                  <View style={styles.teamPreviewLogo}>
+                    <Text style={styles.teamPreviewLogoText}>{team.shortName}</Text>
+                  </View>
+                  <Text style={styles.teamPreviewName}>{team.shortName}</Text>
+                  <Text style={styles.teamPreviewStadium}>{team.stadium}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+            <Text style={styles.teamsTapHint}>Tap to view teams and players</Text>
+          </View>
+
+          {/* My Tournaments Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>My Tournaments</Text>
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => setShowAddTournament(!showAddTournament)}
+              >
+                <Text style={styles.addBtnText}>+ Add</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Add Tournament Form */}
+            {showAddTournament && (
+              <View style={styles.addForm}>
+                <Text style={styles.formTitle}>Add New Tournament</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Tournament Name"
+                  placeholderTextColor="#ADB5BD"
+                  value={newTournament.name}
+                  onChangeText={(value) => setNewTournament({ ...newTournament, name: value })}
+                />
+                <View style={styles.formRow}>
+                  <TextInput
+                    style={[styles.input, styles.halfInput]}
+                    placeholder="Teams"
+                    placeholderTextColor="#ADB5BD"
+                    keyboardType="number-pad"
+                    value={newTournament.teams}
+                    onChangeText={(value) => setNewTournament({ ...newTournament, teams: value })}
+                  />
+                  <TextInput
+                    style={[styles.input, styles.halfInput]}
+                    placeholder="Date (e.g. Jan - Mar)"
+                    placeholderTextColor="#ADB5BD"
+                    value={newTournament.date}
+                    onChangeText={(value) => setNewTournament({ ...newTournament, date: value })}
+                  />
                 </View>
-                <Text style={styles.teamPreviewName}>{team.shortName}</Text>
-                <Text style={styles.teamPreviewStadium}>{team.stadium}</Text>
+                <View style={styles.formRow}>
+                  <TouchableOpacity
+                    style={[styles.statusBtn, newTournament.status === 'Upcoming' && styles.statusBtnActive]}
+                    onPress={() => setNewTournament({ ...newTournament, status: 'Upcoming' })}
+                  >
+                    <Text style={[styles.statusBtnText, newTournament.status === 'Upcoming' && styles.statusBtnTextActive]}>Upcoming</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.statusBtn, newTournament.status === 'Active' && styles.statusBtnActive]}
+                    onPress={() => setNewTournament({ ...newTournament, status: 'Active' })}
+                  >
+                    <Text style={[styles.statusBtnText, newTournament.status === 'Active' && styles.statusBtnTextActive]}>Active</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.statusBtn, newTournament.status === 'Completed' && styles.statusBtnActive]}
+                    onPress={() => setNewTournament({ ...newTournament, status: 'Completed' })}
+                  >
+                    <Text style={[styles.statusBtnText, newTournament.status === 'Completed' && styles.statusBtnTextActive]}>Completed</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.formActions}>
+                  <TouchableOpacity
+                    style={[styles.formBtn, styles.cancelFormBtn]}
+                    onPress={() => setShowAddTournament(false)}
+                  >
+                    <Text style={styles.cancelFormBtnText}>Cancel</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.formBtn, styles.saveFormBtn]}
+                    onPress={handleAddTournament}
+                  >
+                    <Text style={styles.saveFormBtnText}>Add Tournament</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+
+            {/* Tournaments List */}
+            {tournaments.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyStateText}>No tournaments yet</Text>
+                <Text style={styles.emptyStateSubtext}>Tap "+ Add" to create your first tournament</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={tournaments}
+                renderItem={renderTournamentItem}
+                keyExtractor={(item) => item.id}
+                scrollEnabled={false}
+                contentContainerStyle={styles.tournamentsList}
+              />
+            )}
+          </View>
+
+          {/* My Matches Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>My Matches</Text>
+              <TouchableOpacity
+                style={styles.viewAllBtn}
+                onPress={() => navigation.navigate('Matches')}
+              >
+                <Text style={styles.viewAllText}>View All</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={styles.matchesSummary}>
+              <View style={styles.matchStatCard}>
+                <Text style={styles.matchStatNumber}>{matches.filter(m => m.status === 'played').length}</Text>
+                <Text style={styles.matchStatLabel}>Played</Text>
+              </View>
+              <View style={styles.matchStatCard}>
+                <Text style={[styles.matchStatNumber, styles.upcomingColor]}>{matches.filter(m => m.status === 'upcoming').length}</Text>
+                <Text style={styles.matchStatLabel}>Upcoming</Text>
+              </View>
+              <View style={styles.matchStatCard}>
+                <Text style={[styles.matchStatNumber, styles.liveColor]}>{matches.filter(m => m.status === 'live').length}</Text>
+                <Text style={styles.matchStatLabel}>Live</Text>
+              </View>
+            </View>
+
+            {/* Recent Matches */}
+            {matches.slice(0, 2).map((match) => (
+              <TouchableOpacity
+                key={match.id}
+                style={styles.matchPreviewCard}
+                onPress={() => navigation.navigate('Matches')}
+              >
+                <View style={styles.matchPreviewHeader}>
+                  <Text style={styles.matchPreviewDate}>{match.date}</Text>
+                  <View style={[styles.matchStatusBadge, match.status === 'played' && styles.statusPlayed, match.status === 'upcoming' && styles.statusUpcoming]}>
+                    <Text style={[styles.matchStatusText, match.status === 'played' && styles.statusTextPlayed]}>{match.status}</Text>
+                  </View>
+                </View>
+                <View style={styles.matchPreviewTeams}>
+                  <Text style={styles.matchPreviewTeam}>{match.homeTeam}</Text>
+                  <Text style={styles.matchPreviewScore}>
+                    {match.status === 'played' ? `${match.homeScore} - ${match.awayScore}` : 'VS'}
+                  </Text>
+                  <Text style={styles.matchPreviewTeam}>{match.awayTeam}</Text>
+                </View>
+                {match.status === 'upcoming' && (
+                  <Text style={styles.tapToConvoke}>Tap to manage convocation</Text>
+                )}
               </TouchableOpacity>
             ))}
           </View>
-          <Text style={styles.teamsTapHint}>Tap to view teams and players</Text>
-        </View>
 
-        {/* My Tournaments Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Tournaments</Text>
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => setShowAddTournament(!showAddTournament)}
-            >
-              <Text style={styles.addBtnText}>+ Add</Text>
-            </TouchableOpacity>
-          </View>
+          {/* My Mercato Section */}
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>My Mercato</Text>
+              <TouchableOpacity
+                style={styles.viewAllBtn}
+                onPress={() => navigation.navigate('Mercato')}
+              >
+                <Text style={styles.viewAllText}>View All</Text>
+              </TouchableOpacity>
+            </View>
 
-          {/* Add Tournament Form */}
-          {showAddTournament && (
-            <View style={styles.addForm}>
-              <Text style={styles.formTitle}>Add New Tournament</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Tournament Name"
-                placeholderTextColor="#ADB5BD"
-                value={newTournament.name}
-                onChangeText={(value) => setNewTournament({ ...newTournament, name: value })}
-              />
-              <View style={styles.formRow}>
-                <TextInput
-                  style={[styles.input, styles.halfInput]}
-                  placeholder="Teams"
-                  placeholderTextColor="#ADB5BD"
-                  keyboardType="number-pad"
-                  value={newTournament.teams}
-                  onChangeText={(value) => setNewTournament({ ...newTournament, teams: value })}
-                />
-                <TextInput
-                  style={[styles.input, styles.halfInput]}
-                  placeholder="Date (e.g. Jan - Mar)"
-                  placeholderTextColor="#ADB5BD"
-                  value={newTournament.date}
-                  onChangeText={(value) => setNewTournament({ ...newTournament, date: value })}
-                />
-              </View>
-              <View style={styles.formRow}>
-                <TouchableOpacity
-                  style={[styles.statusBtn, newTournament.status === 'Upcoming' && styles.statusBtnActive]}
-                  onPress={() => setNewTournament({ ...newTournament, status: 'Upcoming' })}
-                >
-                  <Text style={[styles.statusBtnText, newTournament.status === 'Upcoming' && styles.statusBtnTextActive]}>Upcoming</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.statusBtn, newTournament.status === 'Active' && styles.statusBtnActive]}
-                  onPress={() => setNewTournament({ ...newTournament, status: 'Active' })}
-                >
-                  <Text style={[styles.statusBtnText, newTournament.status === 'Active' && styles.statusBtnTextActive]}>Active</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.statusBtn, newTournament.status === 'Completed' && styles.statusBtnActive]}
-                  onPress={() => setNewTournament({ ...newTournament, status: 'Completed' })}
-                >
-                  <Text style={[styles.statusBtnText, newTournament.status === 'Completed' && styles.statusBtnTextActive]}>Completed</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.formActions}>
-                <TouchableOpacity
-                  style={[styles.formBtn, styles.cancelFormBtn]}
-                  onPress={() => setShowAddTournament(false)}
-                >
-                  <Text style={styles.cancelFormBtnText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.formBtn, styles.saveFormBtn]}
-                  onPress={handleAddTournament}
-                >
-                  <Text style={styles.saveFormBtnText}>Add Tournament</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-
-          {/* Tournaments List */}
-          {tournaments.length === 0 ? (
-            <View style={styles.emptyState}>
-              <Text style={styles.emptyStateText}>No tournaments yet</Text>
-              <Text style={styles.emptyStateSubtext}>Tap "+ Add" to create your first tournament</Text>
-            </View>
-          ) : (
-            <FlatList
-              data={tournaments}
-              renderItem={renderTournamentItem}
-              keyExtractor={(item) => item.id}
-              scrollEnabled={false}
-              contentContainerStyle={styles.tournamentsList}
-            />
-          )}
-        </View>
-
-        {/* My Matches Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Matches</Text>
-            <TouchableOpacity
-              style={styles.viewAllBtn}
-              onPress={() => navigation.navigate('Matches')}
-            >
-              <Text style={styles.viewAllText}>View All</Text>
-            </TouchableOpacity>
-          </View>
-          
-          <View style={styles.matchesSummary}>
-            <View style={styles.matchStatCard}>
-              <Text style={styles.matchStatNumber}>{matches.filter(m => m.status === 'played').length}</Text>
-              <Text style={styles.matchStatLabel}>Played</Text>
-            </View>
-            <View style={styles.matchStatCard}>
-              <Text style={[styles.matchStatNumber, styles.upcomingColor]}>{matches.filter(m => m.status === 'upcoming').length}</Text>
-              <Text style={styles.matchStatLabel}>Upcoming</Text>
-            </View>
-            <View style={styles.matchStatCard}>
-              <Text style={[styles.matchStatNumber, styles.liveColor]}>{matches.filter(m => m.status === 'live').length}</Text>
-              <Text style={styles.matchStatLabel}>Live</Text>
-            </View>
-          </View>
-
-          {/* Recent Matches */}
-          {matches.slice(0, 2).map((match) => (
-            <TouchableOpacity
-              key={match.id}
-              style={styles.matchPreviewCard}
-              onPress={() => navigation.navigate('Matches')}
-            >
-              <View style={styles.matchPreviewHeader}>
-                <Text style={styles.matchPreviewDate}>{match.date}</Text>
-                <View style={[styles.matchStatusBadge, match.status === 'played' && styles.statusPlayed, match.status === 'upcoming' && styles.statusUpcoming]}>
-                  <Text style={[styles.matchStatusText, match.status === 'played' && styles.statusTextPlayed]}>{match.status}</Text>
+            <View style={styles.mercatoSummaryCard}>
+              <View style={styles.mercatoSummaryHeader}>
+                <View style={styles.mercatoIconContainer}>
+                  <Text style={styles.mercatoIcon}>🔄</Text>
+                </View>
+                <View style={styles.mercatoSummaryInfo}>
+                  <Text style={styles.mercatoSummaryTitle}>Transfer Market</Text>
+                  <Text style={styles.mercatoSummarySubtitle}>
+                    {mercatos.length} active mercatos
+                  </Text>
                 </View>
               </View>
-              <View style={styles.matchPreviewTeams}>
-                <Text style={styles.matchPreviewTeam}>{match.homeTeam}</Text>
-                <Text style={styles.matchPreviewScore}>
-                  {match.status === 'played' ? `${match.homeScore} - ${match.awayScore}` : 'VS'}
-                </Text>
-                <Text style={styles.matchPreviewTeam}>{match.awayTeam}</Text>
-              </View>
-              {match.status === 'upcoming' && (
-                <Text style={styles.tapToConvoke}>Tap to manage convocation</Text>
-              )}
-            </TouchableOpacity>
-          ))}
-        </View>
 
-        {/* My Mercato Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>My Mercato</Text>
-            <TouchableOpacity
-              style={styles.viewAllBtn}
-              onPress={() => navigation.navigate('Mercato')}
-            >
-              <Text style={styles.viewAllText}>View All</Text>
-            </TouchableOpacity>
+              <View style={styles.mercatoStatsRow}>
+                <View style={styles.mercatoStatItem}>
+                  <Text style={styles.mercatoStatNumber}>{transfers.length}</Text>
+                  <Text style={styles.mercatoStatLabel}>Transfers</Text>
+                </View>
+                <View style={styles.mercatoStatDivider} />
+                <View style={styles.mercatoStatItem}>
+                  <Text style={[styles.mercatoStatNumber, styles.revenueColor]}>
+                    {formatCurrency(transfers.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.transferFee, 0))}
+                  </Text>
+                  <Text style={styles.mercatoStatLabel}>Revenue</Text>
+                </View>
+                <View style={styles.mercatoStatDivider} />
+                <View style={styles.mercatoStatItem}>
+                  <Text style={styles.mercatoStatNumber}>
+                    {mercatos.filter(m => m.status === 'active').length}
+                  </Text>
+                  <Text style={styles.mercatoStatLabel}>Active</Text>
+                </View>
+              </View>
+
+              <TouchableOpacity
+                style={styles.mercatoActionBtn}
+                onPress={() => navigation.navigate('Mercato')}
+              >
+                <Text style={styles.mercatoActionText}>Manage Mercato →</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View style={styles.mercatoSummaryCard}>
-            <View style={styles.mercatoSummaryHeader}>
-              <View style={styles.mercatoIconContainer}>
-                <Text style={styles.mercatoIcon}>🔄</Text>
-              </View>
-              <View style={styles.mercatoSummaryInfo}>
-                <Text style={styles.mercatoSummaryTitle}>Transfer Market</Text>
-                <Text style={styles.mercatoSummarySubtitle}>
-                  {mercatos.length} active mercatos
-                </Text>
-              </View>
-            </View>
+          {/* Logout Button */}
+          <TouchableOpacity 
+            style={styles.logoutBtn} 
+            onPress={() => {
+              logout();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              });
+            }}
+          >
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </SafeAreaView>
 
-            <View style={styles.mercatoStatsRow}>
-              <View style={styles.mercatoStatItem}>
-                <Text style={styles.mercatoStatNumber}>{transfers.length}</Text>
-                <Text style={styles.mercatoStatLabel}>Transfers</Text>
-              </View>
-              <View style={styles.mercatoStatDivider} />
-              <View style={styles.mercatoStatItem}>
-                <Text style={[styles.mercatoStatNumber, styles.revenueColor]}>
-                  {formatCurrency(transfers.filter(t => t.status === 'completed').reduce((sum, t) => sum + t.transferFee, 0))}
-                </Text>
-                <Text style={styles.mercatoStatLabel}>Revenue</Text>
-              </View>
-              <View style={styles.mercatoStatDivider} />
-              <View style={styles.mercatoStatItem}>
-                <Text style={styles.mercatoStatNumber}>
-                  {mercatos.filter(m => m.status === 'active').length}
-                </Text>
-                <Text style={styles.mercatoStatLabel}>Active</Text>
-              </View>
-            </View>
-
-            <TouchableOpacity
-              style={styles.mercatoActionBtn}
-              onPress={() => navigation.navigate('Mercato')}
-            >
-              <Text style={styles.mercatoActionText}>Manage Mercato →</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Logout Button */}
-        <TouchableOpacity 
-          style={styles.logoutBtn} 
-          onPress={() => {
-            logout();
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Login' }],
-            });
-          }}
-        >
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      {/* Bottom Navigation Bar */}
+      <BottomNavBar />
 
       {/* Edit Tournament Modal */}
       {editingTournament && (
@@ -461,7 +445,7 @@ export default function CoachDashboardScreen({ navigation }: any) {
           </View>
         </View>
       )}
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -470,53 +454,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F8F9FA',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E9ECEF',
-  },
-  headerLeft: {
+  safeArea: {
     flex: 1,
-  },
-  welcomeText: {
-    fontSize: 14,
-    color: '#6C757D',
-    fontWeight: '500',
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: '800',
-    color: '#212529',
-  },
-  avatarBtn: {
-    marginLeft: 12,
-  },
-  avatar: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-  },
-  avatarPlaceholder: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-    backgroundColor: '#00FF41',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  avatarText: {
-    fontWeight: '700',
-    fontSize: 18,
-    color: '#000',
   },
   scrollContent: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 140,
   },
   section: {
     marginBottom: 24,

@@ -15,7 +15,7 @@ const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
 const initialPlayers: Player[] = [
   {
     id: '1',
-    name: 'Mohamed Salah',
+    name: 'Marwen dov',
     position: 'Forward',
     number: 11,
     age: 32,
@@ -26,7 +26,7 @@ const initialPlayers: Player[] = [
   },
   {
     id: '2',
-    name: 'Kevin De Bruyne',
+    name: 'Aymen za3touta',
     position: 'Midfielder',
     number: 17,
     age: 33,

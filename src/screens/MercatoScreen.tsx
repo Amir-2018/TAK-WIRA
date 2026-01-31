@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useApp } from '../context/AppContext';
 import { Mercato } from '../types/user';
+import BottomNavBar from '../components/BottomNavBar';
 
 export default function MercatoScreen({ navigation }: any) {
   const { user, mercatos, tournaments, transfers, addMercato, deleteMercato } = useApp();
@@ -226,6 +227,8 @@ export default function MercatoScreen({ navigation }: any) {
       >
         <Text style={styles.addButtonText}>+ Create Mercato</Text>
       </TouchableOpacity>
+
+      <BottomNavBar />
 
       {/* Add Mercato Modal */}
       <Modal
@@ -483,7 +486,7 @@ const styles = StyleSheet.create({
   },
   addButton: {
     position: 'absolute',
-    bottom: 24,
+    bottom: 110,
     left: 20,
     right: 20,
     backgroundColor: '#00FF41',

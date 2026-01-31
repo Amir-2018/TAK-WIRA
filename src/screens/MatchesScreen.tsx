@@ -3,16 +3,14 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
-  Image,
   SafeAreaView,
   StatusBar,
-  ScrollView,
   SectionList,
 } from 'react-native';
 import { useApp } from '../context/AppContext';
 import { Match, CardEvent } from '../types/user';
+import BottomNavBar from '../components/BottomNavBar';
 
 type MatchFilter = 'all' | 'played' | 'upcoming';
 
@@ -193,6 +191,7 @@ export default function MatchesScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         SectionSeparatorComponent={() => <View style={styles.sectionSpacer} />}
       />
+      <BottomNavBar />
     </SafeAreaView>
   );
 }
@@ -240,7 +239,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingBottom: 110,
   },
   matchCard: {
     backgroundColor: '#FFFFFF',

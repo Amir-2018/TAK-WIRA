@@ -15,6 +15,22 @@ export interface Tournament {
   status: 'Live' | 'Upcoming' | 'Active' | 'Completed';
   description?: string;
   ownerId: string;
+  results?: {
+    winner: {
+      teamName: string;
+      logo: string;
+    };
+    topScorer: {
+      playerName: string;
+      goals: number;
+      image?: string;
+    };
+    rankings: {
+      teamName: string;
+      logo: string;
+      rank: 1 | 2 | 3;
+    }[];
+  };
 }
 
 export interface Match {
@@ -30,7 +46,26 @@ export interface Match {
   awayScore?: number;
   yellowCards?: { team: 'home' | 'away'; count: number };
   redCards?: { team: 'home' | 'away'; count: number };
-  convokedPlayers?: string[]; // Array of player IDs convoked for this match
+  convokedPlayers?: string[];
+  referees?: string[];
+  homeFormation?: {
+    formation: string; // e.g., '4-4-2'
+    players: {
+      id: string;
+      name: string;
+      position: { x: number; y: number }; // Percentage coordinates for the pitch
+      role: string;
+    }[];
+  };
+  awayFormation?: {
+    formation: string;
+    players: {
+      id: string;
+      name: string;
+      position: { x: number; y: number };
+      role: string;
+    }[];
+  };
 }
 
 export interface CardEvent {
@@ -54,8 +89,14 @@ export interface Team {
     primary: string;
     secondary: string;
   };
-  playerIds: string[]; // IDs of players in this team
-  tournamentIds: string[]; // Tournaments this team participates in
+  playerIds: string[];
+  tournamentIds: string[];
+  agenda?: {
+    date: string;
+    opponent: string;
+    tournament: string;
+    matchId: string;
+  }[];
 }
 
 export interface Mercato {
