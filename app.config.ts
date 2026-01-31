@@ -1,0 +1,33 @@
+import { ExpoConfig } from '@expo/config';
+
+const config: ExpoConfig = {
+  name: 'Vite React Native',
+  slug: 'vite-react-native',
+  version: '1.0.0',
+  orientation: 'portrait',
+  icon: './src/assets/hero.png',
+  userInterfaceStyle: 'light',
+  splash: {
+    image: './src/assets/hero.png',
+    resizeMode: 'contain',
+    backgroundColor: '#ffffff',
+  },
+  assetBundlePatterns: ['**/*'],
+  ios: {
+    supportsTablet: true,
+    bundleIdentifier: 'com.vitereactnative.app',
+  },
+  android: {
+    adaptiveIcon: {
+      foregroundImage: './src/assets/hero.png',
+      backgroundColor: '#ffffff',
+    },
+    package: 'com.vitereactnative.app',
+  },
+  web: {
+    favicon: './src/assets/hero.png',
+  },
+};
+
+export default config;
+
